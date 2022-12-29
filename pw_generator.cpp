@@ -4,10 +4,6 @@
 #include <algorithm>
 #include <chrono>
 
-using namespace std::chrono;
-
-char boolCheck(bool boolean) { return boolean ? 'X' : ' '; }
-
 std::string shuffle(std::string pw) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine e(seed);
@@ -15,46 +11,35 @@ std::string shuffle(std::string pw) {
     return pw;
 }
 
+int main() {
+    std::string lowercase = "qwertyuiopasdfghjklzxcvbnm";
+    std::string uppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
+    std::string numbers = "0123456789";
+    std::string symbols = "!$%&/=?@,.-;:_()[]{}~#*+|<>'";
 
-
-void menu() {
-    int length;
-    bool letters = true, numbers = true, capitalized = true, symbols = true;
-
-    std::cout << "Password Generator \n\nCurrently settings: \nLetters [" << boolCheck(letters) << "] \nNumbers [" << boolCheck(numbers) << "] \nCapitalized [" << boolCheck(capitalized) << "] \nSymbols [" << boolCheck(symbols) << "] \n\nInsert password length, minimum length is 8. \nPassword length = ";
+    int length = -1;
+    std::cout << "Insert the desired length: "; 
     std::cin >> length;
-
-    while (length < 8) {
-        std::cout << "\nPassword length is too short, minimum length is 8. \nPassword length = ";
+    
+    // check if length is too short
+    while (length < 12) {
+        std::cout << "\nPassword length is too short, minimum length is 12. \nInsert length again: ";
         std::cin >> length;
     }
-}
+    // check if length is too long
+    while (length > 32) {
+        std::cout << "\nPassword length is too long, maximum length is 32. \nInsert length again: ";
+        std::cin >> length;        
+    }
 
-int main() {
-    std::string testPW = "abc123";
-    std::string lowerCase = "qwertyuiopasdfghjklzxcvbnm";
-    std::string upperCase = "QWERTYUIOPASDFGHJKLZXCVBNM";
-    std::string numbers = "0123456789";
-    std::string symbols = "!£$%&/=?@,.-;:_";
-
-    std::string combinedLowerCase = shuffle(lowerCase);
-    std::string combinedUpperCase = shuffle(upperCase);
-    std::string combinedNumbers = shuffle(numbers);
-    std::string combinedSymbols = shuffle(symbols);
-
-    int lenght = 16;
-
-    //PLACEHOLDER FOR TESTING
-
-    std::string notShuffledPW;
-    for (int i=0; i<4; ++i) notShuffledPW += combinedLowerCase[i];
-    for (int i=0; i<4; ++i) notShuffledPW += combinedUpperCase[i];
-    for (int i=0; i<4; ++i) notShuffledPW += combinedNumbers[i];
-    for (int i=0; i<4; ++i) notShuffledPW += combinedSymbols[i];
-    // std::cout << notShuffledPW;
-
-    std::string shuffledPW = shuffle(notShuffledPW);
-    std::cout << shuffledPW;
-    // std::string notShuffledPW = combinedLowerCase + combinedUpperCase + combinedNumbers + combinedSymbols;
+    // pw must have every type of char to be efficient 
+    std::string pw = lowercase + uppercase + numbers + symbols;
+    // then we shuffle it
+    pw = shuffle(pw);
+    // then we resize it to the desired length
+    pw.resize(length);
+    // finally we print it
+    std::cout << pw;
     
+    return 0;
 }
